@@ -2,9 +2,14 @@ from csv import reader
 
 
 def load_csv(filename):
-    file = open(filename, "r")
-    lines = reader(file)
-    return list(lines)
+    data_rows = list()
+    with open(filename, 'r') as file:
+        csv_reader = reader(file)
+        for row in csv_reader:
+            if not row:
+                continue
+            data_rows.append(row)
+    return data_rows
 
 
 diabetes_csv_filename = 'datasets/pima-indians-diabetes.data.csv'
