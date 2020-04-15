@@ -23,9 +23,16 @@ def convert_all_attributes_to_floats(data_rows):
         convert_entire_column_to_floats(dataset, column_index)
 
 
+def print_first_five_rows_of_data(data_rows):
+    print('First five rows in dataset:')
+    for row_index in range(5):
+        print(data_rows[0])
+
+
 diabetes_csv_filename = 'datasets/pima-indians-diabetes.data.csv'
 dataset = load_csv(diabetes_csv_filename)
 print('Loaded data file {0} with {1} rows and {2} columns'.format(diabetes_csv_filename, len(dataset), len(dataset[0])))
-print('First row data prior to conversions: {0}'.format(dataset[0]))
+print_first_five_rows_of_data(dataset)
+
 convert_all_attributes_to_floats(dataset)
-print('First row data after conversions: {0}'.format(dataset[0]))
+print_first_five_rows_of_data(dataset)
