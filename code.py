@@ -34,8 +34,11 @@ def load_dataset_csv_file(file_path):
     return data_rows
 
 
-dataset = load_dataset_csv_file('datasets/pima-indians-diabetes.data.csv')
-print_first_five_rows_of_data(dataset)
+pima_indians_diabetes_dataset = load_dataset_csv_file('datasets/pima-indians-diabetes.data.csv')
+print_first_five_rows_of_data(pima_indians_diabetes_dataset)
 
-convert_data_to_floats_in_column_range(dataset, range(0, len(dataset[0])))
-print_first_five_rows_of_data(dataset)
+convert_data_to_floats_in_column_range(pima_indians_diabetes_dataset, range(0, len(pima_indians_diabetes_dataset[0])))
+print_first_five_rows_of_data(pima_indians_diabetes_dataset)
+
+iris_flowers_dataset = load_dataset_csv_file('datasets/iris-species.data.csv')
+print_first_five_rows_of_data(iris_flowers_dataset)
