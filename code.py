@@ -12,6 +12,20 @@ def load_csv(filename):
     return data_rows
 
 
+def convert_entire_column_to_floats(data_rows, column_index):
+    for row in data_rows:
+        row[column_index] = float(row[column_index].strip())
+
+
+def convert_all_attributes_to_floats(data_rows):
+    num_columns = len(data_rows[0])
+    for column_index in range(num_columns):
+        convert_entire_column_to_floats(dataset, column_index)
+
+
 diabetes_csv_filename = 'datasets/pima-indians-diabetes.data.csv'
 dataset = load_csv(diabetes_csv_filename)
 print('Loaded data file {0} with {1} rows and {2} columns'.format(diabetes_csv_filename, len(dataset), len(dataset[0])))
+print('First row data prior to conversions: {0}'.format(dataset[0]))
+convert_all_attributes_to_floats(dataset)
+print('First row data after conversions: {0}'.format(dataset[0]))
