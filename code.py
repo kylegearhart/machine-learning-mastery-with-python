@@ -17,22 +17,25 @@ def convert_entire_column_to_floats(data_rows, column_index):
         row[column_index] = float(row[column_index].strip())
 
 
-def convert_all_attributes_to_floats(data_rows):
-    num_columns = len(data_rows[0])
-    for column_index in range(num_columns):
-        convert_entire_column_to_floats(dataset, column_index)
+def convert_data_to_floats_in_column_range(data_rows, column_range):
+    for column_index in column_range:
+        convert_entire_column_to_floats(data_rows, column_index)
 
 
 def print_first_five_rows_of_data(data_rows):
     print('First five rows in dataset:')
     for row_index in range(5):
-        print(data_rows[0])
+        print(data_rows[row_index])
 
 
-diabetes_csv_filename = 'datasets/pima-indians-diabetes.data.csv'
-dataset = load_csv(diabetes_csv_filename)
-print('Loaded data file {0} with {1} rows and {2} columns'.format(diabetes_csv_filename, len(dataset), len(dataset[0])))
+def load_dataset_csv_file(file_path):
+    data_rows = load_csv(file_path)
+    print('Loaded data file {0} with {1} rows and {2} columns'.format(file_path, len(data_rows), len(data_rows[0])))
+    return data_rows
+
+
+dataset = load_dataset_csv_file('datasets/pima-indians-diabetes.data.csv')
 print_first_five_rows_of_data(dataset)
 
-convert_all_attributes_to_floats(dataset)
+convert_data_to_floats_in_column_range(dataset, range(0, len(dataset[0])))
 print_first_five_rows_of_data(dataset)
