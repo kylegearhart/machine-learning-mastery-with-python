@@ -12,6 +12,24 @@ def load_csv(filename):
     return data_rows
 
 
+def convert_string_class_names_to_ints_for_column(data_rows, column_index):
+    all_values_in_column = []
+    for row in data_rows:
+        all_values_in_column.append(row[column_index])
+    set_of_discrete_values_in_column = set(all_values_in_column)
+
+    discrete_value_to_int_dict = dict()
+    for index, discrete_value in enumerate(set_of_discrete_values_in_column):
+        discrete_value_to_int_dict[discrete_value] = index
+
+    for row in data_rows:
+        column_value = row[column_index]
+        row[column_index] = discrete_value_to_int_dict[column_value]
+
+    print('Performed string-to-int conversion on column {0}: {1}'.format(column_index,
+                                                                         discrete_value_to_int_dict))
+
+
 def convert_entire_column_to_floats(data_rows, column_index):
     for row in data_rows:
         row[column_index] = float(row[column_index].strip())
@@ -41,4 +59,7 @@ convert_data_to_floats_in_column_range(pima_indians_diabetes_dataset, range(0, l
 print_first_five_rows_of_data(pima_indians_diabetes_dataset)
 
 iris_flowers_dataset = load_dataset_csv_file('datasets/iris-species.data.csv')
+print_first_five_rows_of_data(iris_flowers_dataset)
+
+convert_string_class_names_to_ints_for_column(iris_flowers_dataset, 4)
 print_first_five_rows_of_data(iris_flowers_dataset)
