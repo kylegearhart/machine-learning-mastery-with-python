@@ -1,4 +1,5 @@
 from csv import reader
+from math import sqrt
 
 
 def convert_string_class_names_to_ints_for_column(data_rows, column_index):
@@ -50,6 +51,38 @@ def dataset_minmax(dataset):
     return minmax
 
 
+def standardize_dataset(dataset, means, stdevs):
+    for row in dataset:
+        for column_index in range(len(row)):
+            row[column_index] = (row[column_index] - means[column_index]) / stdevs[column_index]
+    print('Standardized entire dataset:\nusing means of {0}\nstdevs of {1}'.format(means, stdevs))
+    print_first_five_rows_of_data(dataset)
+
+
+def column_means_for(dataset):
+    num_rows_in_dataset = float(len(dataset))
+    means_for_all_columns = [0 for _ in column_range_for(dataset)]
+    for column_index in column_range_for(dataset):
+        column_values = [row[column_index] for row in dataset]
+        means_for_all_columns[column_index] = sum(column_values) / num_rows_in_dataset
+
+    return means_for_all_columns
+
+
+def column_stdevs_for(dataset, column_means):
+    stdevs_for_all_columns = [0 for _ in column_range_for(dataset)]
+    for column_index in column_range_for(dataset):
+        variance = [pow(row[column_index]-column_means[column_index], 2) for row in dataset]
+        stdevs_for_all_columns[column_index] = sum(variance)
+    stdevs_for_all_columns = [sqrt(column_stdev/(float(len(dataset) - 1))) for column_stdev in stdevs_for_all_columns]
+
+    return stdevs_for_all_columns
+
+
+def column_range_for(dataset):
+    return range(len(dataset[0]))
+
+
 def print_first_five_rows_of_data(data_rows):
     print('First five rows in dataset:')
     for row_index in range(5):
@@ -71,11 +104,20 @@ def load_dataset_csv_file(file_path):
     return data_rows
 
 
-def preprocess_pima_indians_diabetes_dataset():
+def preprocess_and_normalize_pima_indians_diabetes_dataset():
     dataset = load_dataset_csv_file('datasets/pima-indians-diabetes.data.csv')
     convert_data_to_floats_in_column_range(dataset,
                                            range(0, len(dataset[0])))
     normalize_dataset(dataset, dataset_minmax(dataset))
+
+
+def preprocess_and_standardize_pima_indians_diabetes_dataset():
+    dataset = load_dataset_csv_file('datasets/pima-indians-diabetes.data.csv')
+    convert_data_to_floats_in_column_range(dataset,
+                                           range(0, len(dataset[0])))
+    column_means = column_means_for(dataset)
+    column_stdevs = column_stdevs_for(dataset, column_means)
+    standardize_dataset(dataset, column_means, column_stdevs)
 
 
 def preprocess_iris_flowers_dataset():
@@ -83,5 +125,7 @@ def preprocess_iris_flowers_dataset():
     convert_string_class_names_to_ints_for_column(dataset, 4)
 
 
-preprocess_pima_indians_diabetes_dataset()
+preprocess_and_normalize_pima_indians_diabetes_dataset()
+preprocess_and_standardize_pima_indians_diabetes_dataset()
+
 preprocess_iris_flowers_dataset()
