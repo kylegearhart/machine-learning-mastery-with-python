@@ -1,17 +1,6 @@
 from csv import reader
 
 
-def load_csv(filename):
-    data_rows = list()
-    with open(filename, 'r') as file:
-        csv_reader = reader(file)
-        for row in csv_reader:
-            if not row:
-                continue
-            data_rows.append(row)
-    return data_rows
-
-
 def convert_string_class_names_to_ints_for_column(data_rows, column_index):
     all_values_in_column = []
     for row in data_rows:
@@ -48,7 +37,14 @@ def print_first_five_rows_of_data(data_rows):
 
 
 def load_dataset_csv_file(file_path):
-    data_rows = load_csv(file_path)
+    rows = list()
+    with open(file_path, 'r') as file:
+        csv_reader = reader(file)
+        for row in csv_reader:
+            if not row:
+                continue
+            rows.append(row)
+    data_rows = rows
     print('Loaded data file {0} with {1} rows and {2} columns'.format(file_path, len(data_rows), len(data_rows[0])))
     return data_rows
 
