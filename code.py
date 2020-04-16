@@ -79,8 +79,8 @@ def preprocess_pima_indians_diabetes_dataset():
 
 
 def preprocess_iris_flowers_dataset():
-    iris_flowers_dataset = load_dataset_csv_file('datasets/iris-species.data.csv')
-    convert_string_class_names_to_ints_for_column(iris_flowers_dataset, 4)
+    dataset = load_dataset_csv_file('datasets/iris-species.data.csv')
+    convert_string_class_names_to_ints_for_column(dataset, 4)
 
 
 preprocess_pima_indians_diabetes_dataset()
