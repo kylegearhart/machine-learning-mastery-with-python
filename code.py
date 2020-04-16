@@ -28,7 +28,7 @@ def convert_entire_column_to_floats(data_rows, column_index):
 def convert_data_to_floats_in_column_range(data_rows, column_range):
     for column_index in column_range:
         convert_entire_column_to_floats(data_rows, column_index)
-    print('Converted data in columns {0}-{1} to floats'.format(column_range[0], column_range[len(column_range)-1]))
+    print('Converted data in columns {0}-{1} to floats'.format(column_range[0], column_range[len(column_range) - 1]))
     print_first_five_rows_of_data(data_rows)
 
 
@@ -38,7 +38,7 @@ def normalize_dataset(dataset, minmax):
             min_for_column = minmax[column_index][0]
             max_for_column = minmax[column_index][1]
             row[column_index] = (row[column_index] - min_for_column) / (max_for_column - min_for_column)
-    print('Normalized entire dataset using min-maxes of: {0}'.format(minmax))
+    print('Normalized entire dataset:\nusing min-maxes of {0}'.format(minmax))
     print_first_five_rows_of_data(dataset)
 
 
