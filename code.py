@@ -27,6 +27,27 @@ def convert_entire_column_to_floats(data_rows, column_index):
 def convert_data_to_floats_in_column_range(data_rows, column_range):
     for column_index in column_range:
         convert_entire_column_to_floats(data_rows, column_index)
+    print('Converted data in columns {0}-{1} to floats'.format(column_range[0], column_range[len(column_range)-1]))
+    print_first_five_rows_of_data(data_rows)
+
+
+def normalize_dataset(dataset, minmax):
+    for row in dataset:
+        for column_index in range(len(row)):
+            min_for_column = minmax[column_index][0]
+            max_for_column = minmax[column_index][1]
+            row[column_index] = (row[column_index] - min_for_column) / (max_for_column - min_for_column)
+    print('Normalized entire dataset using min-maxes of: {0}'.format(minmax))
+    print_first_five_rows_of_data(dataset)
+
+
+def dataset_minmax(dataset):
+    minmax = list()
+    num_columns = range(len(dataset[0]))
+    for column_index in num_columns:
+        column_values = [row[column_index] for row in dataset]
+        minmax.append([min(column_values), max(column_values)])
+    return minmax
 
 
 def print_first_five_rows_of_data(data_rows):
@@ -46,24 +67,20 @@ def load_dataset_csv_file(file_path):
             rows.append(row)
     data_rows = rows
     print('Loaded data file {0} with {1} rows and {2} columns'.format(file_path, len(data_rows), len(data_rows[0])))
+    print_first_five_rows_of_data(data_rows)
     return data_rows
 
 
 def preprocess_pima_indians_diabetes_dataset():
-    pima_indians_diabetes_dataset = load_dataset_csv_file('datasets/pima-indians-diabetes.data.csv')
-    print_first_five_rows_of_data(pima_indians_diabetes_dataset)
-
-    convert_data_to_floats_in_column_range(pima_indians_diabetes_dataset,
-                                           range(0, len(pima_indians_diabetes_dataset[0])))
-    print_first_five_rows_of_data(pima_indians_diabetes_dataset)
+    dataset = load_dataset_csv_file('datasets/pima-indians-diabetes.data.csv')
+    convert_data_to_floats_in_column_range(dataset,
+                                           range(0, len(dataset[0])))
+    normalize_dataset(dataset, dataset_minmax(dataset))
 
 
 def preprocess_iris_flowers_dataset():
     iris_flowers_dataset = load_dataset_csv_file('datasets/iris-species.data.csv')
-    print_first_five_rows_of_data(iris_flowers_dataset)
-
     convert_string_class_names_to_ints_for_column(iris_flowers_dataset, 4)
-    print_first_five_rows_of_data(iris_flowers_dataset)
 
 
 preprocess_pima_indians_diabetes_dataset()
