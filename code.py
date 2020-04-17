@@ -18,6 +18,7 @@ def convert_string_class_names_to_ints_for_column(data_rows, column_index):
 
     print('Performed string-to-int conversion on column {0}: {1}'.format(column_index,
                                                                          discrete_value_to_int_dict))
+    print_first_five_rows_of_data(data_rows)
 
 
 def convert_entire_column_to_floats(data_rows, column_index):
