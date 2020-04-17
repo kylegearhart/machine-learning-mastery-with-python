@@ -42,6 +42,7 @@ def normalize_dataset(dataset, minmax):
             row[column_index] = (row[column_index] - min_for_column) / (max_for_column - min_for_column)
     print('Normalized entire dataset:\nusing min-maxes of {0}'.format(minmax))
     print_first_five_rows_of_data(dataset)
+    return dataset
 
 
 def dataset_minmax(dataset):
@@ -59,6 +60,7 @@ def standardize_dataset(dataset, means, stdevs):
             row[column_index] = (row[column_index] - means[column_index]) / stdevs[column_index]
     print('Standardized entire dataset:\nusing means of {0}\nstdevs of {1}'.format(means, stdevs))
     print_first_five_rows_of_data(dataset)
+    return dataset
 
 
 def column_means_for(dataset):
@@ -110,7 +112,7 @@ def preprocess_and_normalize_pima_indians_diabetes_dataset():
     dataset = load_dataset_csv_file('datasets/pima-indians-diabetes.data.csv')
     convert_data_to_floats_in_column_range(dataset,
                                            range(0, len(dataset[0])))
-    normalize_dataset(dataset, dataset_minmax(dataset))
+    return normalize_dataset(dataset, dataset_minmax(dataset))
 
 
 def preprocess_and_standardize_pima_indians_diabetes_dataset():
@@ -119,7 +121,7 @@ def preprocess_and_standardize_pima_indians_diabetes_dataset():
                                            range(0, len(dataset[0])))
     column_means = column_means_for(dataset)
     column_stdevs = column_stdevs_for(dataset, column_means)
-    standardize_dataset(dataset, column_means, column_stdevs)
+    return standardize_dataset(dataset, column_means, column_stdevs)
 
 
 def preprocess_iris_flowers_dataset():
@@ -129,7 +131,6 @@ def preprocess_iris_flowers_dataset():
 
 
 def train_test_split(dataset, split_percentage=0.60):
-    seed(1)
     training_data_rows = list()
     target_num_training_data_rows = split_percentage * len(dataset)
     dataset_copy = list(dataset)
@@ -137,13 +138,32 @@ def train_test_split(dataset, split_percentage=0.60):
         random_row_index = randrange(len(dataset_copy))
         training_data_rows.append(dataset_copy.pop(random_row_index))
     test_data_rows = dataset_copy
-    print('Generated a {0}% training/test data split: \nNum. rows of training data: {1}\nNum. rows of test data: {2}'
+    print('Generated a {0}% training/test data split: \nNum. rows of training data: {1}\nNum. rows of test data: {2}\n'
           .format(int(split_percentage * 100), len(training_data_rows), len(test_data_rows)))
     return training_data_rows, test_data_rows
 
 
-preprocess_and_normalize_pima_indians_diabetes_dataset()
-preprocess_and_standardize_pima_indians_diabetes_dataset()
+def generate_cross_validation_split_data_folds(dataset, num_of_folds=3):
+    dataset_folds = list()
+    dataset_copy = list(dataset)
+    target_num_rows_in_each_fold = int(len(dataset) / num_of_folds)
+    for fold_index in range(num_of_folds):
+        current_fold = list()
+        while len(current_fold) < target_num_rows_in_each_fold:
+            random_row_index = randrange(len(dataset_copy))
+            current_fold.append(dataset_copy.pop(random_row_index))
+        dataset_folds.append(current_fold)
+    print('Split {0}-row dataset into {1} folds with {2} rows each:\n({3} rows are being left out of the data folds)\n'
+          .format(len(dataset), num_of_folds, target_num_rows_in_each_fold, int(len(dataset) % num_of_folds)))
+    return dataset_folds
+
+
+seed(1)  # Ensure that results are always the same
+
+normalized_pima_dataset = preprocess_and_normalize_pima_indians_diabetes_dataset()
+generate_cross_validation_split_data_folds(normalized_pima_dataset, 10)
+standardized_pima_dataset = preprocess_and_standardize_pima_indians_diabetes_dataset()
+generate_cross_validation_split_data_folds(standardized_pima_dataset, 10)
 
 iris_dataset = preprocess_iris_flowers_dataset()
 iris_model_training_data, iris_model_test_data = train_test_split(iris_dataset)
