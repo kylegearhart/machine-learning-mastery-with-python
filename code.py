@@ -138,7 +138,7 @@ def train_test_split(dataset, split_percentage=0.60):
         training_data_rows.append(dataset_copy.pop(random_row_index))
     test_data_rows = dataset_copy
     print('Generated a {0}% training/test data split: \nNum. rows of training data: {1}\nNum. rows of test data: {2}'
-          .format(split_percentage * 100, len(training_data_rows), len(test_data_rows)))
+          .format(int(split_percentage * 100), len(training_data_rows), len(test_data_rows)))
     return training_data_rows, test_data_rows
 
 
