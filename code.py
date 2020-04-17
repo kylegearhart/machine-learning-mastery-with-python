@@ -167,5 +167,3 @@ generate_cross_validation_split_data_folds(standardized_pima_dataset, 10)
 
 iris_dataset = preprocess_iris_flowers_dataset()
 iris_model_training_data, iris_model_test_data = train_test_split(iris_dataset)
-print_first_five_rows_of_data(iris_model_training_data)
-print_first_five_rows_of_data(iris_model_test_data)
