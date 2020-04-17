@@ -1,5 +1,6 @@
 from csv import reader
 from math import sqrt
+from random import randrange, seed
 
 
 def convert_string_class_names_to_ints_for_column(data_rows, column_index):
@@ -73,9 +74,9 @@ def column_means_for(dataset):
 def column_stdevs_for(dataset, column_means):
     stdevs_for_all_columns = [0 for _ in column_range_for(dataset)]
     for column_index in column_range_for(dataset):
-        variance = [pow(row[column_index]-column_means[column_index], 2) for row in dataset]
+        variance = [pow(row[column_index] - column_means[column_index], 2) for row in dataset]
         stdevs_for_all_columns[column_index] = sum(variance)
-    stdevs_for_all_columns = [sqrt(column_stdev/(float(len(dataset) - 1))) for column_stdev in stdevs_for_all_columns]
+    stdevs_for_all_columns = [sqrt(column_stdev / (float(len(dataset) - 1))) for column_stdev in stdevs_for_all_columns]
 
     return stdevs_for_all_columns
 
@@ -124,9 +125,27 @@ def preprocess_and_standardize_pima_indians_diabetes_dataset():
 def preprocess_iris_flowers_dataset():
     dataset = load_dataset_csv_file('datasets/iris-species.data.csv')
     convert_string_class_names_to_ints_for_column(dataset, 4)
+    return dataset
+
+
+def train_test_split(dataset, split_percentage=0.60):
+    seed(1)
+    training_data_rows = list()
+    target_num_training_data_rows = split_percentage * len(dataset)
+    dataset_copy = list(dataset)
+    while len(training_data_rows) < target_num_training_data_rows:
+        random_row_index = randrange(len(dataset_copy))
+        training_data_rows.append(dataset_copy.pop(random_row_index))
+    test_data_rows = dataset_copy
+    print('Generated a {0}% training/test data split: \nNum. rows of training data: {1}\nNum. rows of test data: {2}'
+          .format(split_percentage * 100, len(training_data_rows), len(test_data_rows)))
+    return training_data_rows, test_data_rows
 
 
 preprocess_and_normalize_pima_indians_diabetes_dataset()
 preprocess_and_standardize_pima_indians_diabetes_dataset()
 
-preprocess_iris_flowers_dataset()
+iris_dataset = preprocess_iris_flowers_dataset()
+iris_model_training_data, iris_model_test_data = train_test_split(iris_dataset)
+print_first_five_rows_of_data(iris_model_training_data)
+print_first_five_rows_of_data(iris_model_test_data)
