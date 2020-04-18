@@ -164,7 +164,6 @@ def calculate_classification_accuracy(actual_classes, predicted_classes):
         if actual_classes[index] == predicted_classes[index]:
             num_of_correct_classifications += 1
     classification_accuracy = num_of_correct_classifications / float(len(actual_classes)) * 100.0
-    print('Classification accuracy: {0}%\n'.format(classification_accuracy))
     return classification_accuracy
 
 
@@ -227,8 +226,8 @@ def zero_rule_algorithm_for_classification(training_dataset, test_dataset):
     all_classes_in_training_dataset = [row[last_column_index] for row in training_dataset]
     most_common_class = max(set(all_classes_in_training_dataset), key=all_classes_in_training_dataset.count)
     predictions_on_test_dataset = [most_common_class for _ in range(len(test_dataset))]
-    print('Zero-Rule predictions on test dataset (classification/most-common class):\n{0}\n'
-          .format(predictions_on_test_dataset))
+    print('Zero-Rule prediction on test dataset (classification/most-common class): {0}\n'
+          .format(predictions_on_test_dataset[0]))
     return predictions_on_test_dataset
 
 
@@ -238,17 +237,39 @@ def zero_rule_algorithm_for_regression(training_dataset, test_dataset):
     mean_of_predicted_values = \
         sum(all_predicted_values_in_training_dataset) / float(len(all_predicted_values_in_training_dataset))
     predictions_on_test_dataset = [mean_of_predicted_values for _ in range(len(test_dataset))]
-    print('Zero-Rule predictions on test dataset (regression/mean predicted value):\n{0}\n'
-          .format(predictions_on_test_dataset))
+    print('Zero-Rule prediction on test dataset (regression/mean predicted value): {0}\n'
+          .format(predictions_on_test_dataset[0]))
     return predictions_on_test_dataset
+
+
+def evaluate_algorithm_with_train_test_split(dataset, algorithm, split_percentage, *args):
+    training_dataset, test_dataset_with_predictions = train_test_split(dataset, split_percentage)
+    test_dataset = dataset_with_predictions_cleared_out(test_dataset_with_predictions)
+    predictions_by_algorithm_on_test_dataset = algorithm(training_dataset, test_dataset, *args)
+    prediction_column_index = -1
+    correct_predictions_for_test_dataset = [row[prediction_column_index] for row in test_dataset_with_predictions]
+    accuracy_of_algorithm = \
+        calculate_classification_accuracy(predictions_by_algorithm_on_test_dataset,
+                                          correct_predictions_for_test_dataset)
+    print('Accuracy for algorithm: %.3f%%\n' % accuracy_of_algorithm)
+    return accuracy_of_algorithm
+
+
+def dataset_with_predictions_cleared_out(dataset):
+    dataset_without_predictions = list()
+    for row in dataset:
+        row_copy = list(row)
+        prediction_column_index = -1
+        row_copy[prediction_column_index] = None
+        dataset_without_predictions.append(row_copy)
+    return dataset_without_predictions
 
 
 seed(1)  # Ensure that results are always the same
 
 normalized_pima_dataset = preprocess_and_normalize_pima_indians_diabetes_dataset()
-generate_cross_validation_split_data_folds(normalized_pima_dataset, 10)
-standardized_pima_dataset = preprocess_and_standardize_pima_indians_diabetes_dataset()
-generate_cross_validation_split_data_folds(standardized_pima_dataset, 10)
+evaluate_algorithm_with_train_test_split(normalized_pima_dataset, zero_rule_algorithm_for_classification, 0.6)
 
-iris_dataset = preprocess_iris_flowers_dataset()
-iris_model_training_data, iris_model_test_data = train_test_split(iris_dataset)
+standardized_pima_dataset = preprocess_and_standardize_pima_indians_diabetes_dataset()
+evaluate_algorithm_with_train_test_split(normalized_pima_dataset, zero_rule_algorithm_for_classification, 0.6)
+
