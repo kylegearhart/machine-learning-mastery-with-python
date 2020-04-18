@@ -199,6 +199,17 @@ def calculate_mean_absolute_error(actual_values, predicted_values):
     return mean_absolute_error
 
 
+def calculate_root_mean_squared_error(actual_values, predicted_values):
+    sum_of_squared_error_deltas = 0.0
+    for index in range(len(actual_values)):
+        error_delta = predicted_values[index] - actual_values[index]
+        sum_of_squared_error_deltas += error_delta ** 2
+    mean_squared_error_delta = sum_of_squared_error_deltas / float(len(actual_values))
+    root_mean_squared_error = sqrt(mean_squared_error_delta)
+    print('Root mean squared error: {0}'.format(root_mean_squared_error))
+    return root_mean_squared_error
+
+
 seed(1)  # Ensure that results are always the same
 
 normalized_pima_dataset = preprocess_and_normalize_pima_indians_diabetes_dataset()
