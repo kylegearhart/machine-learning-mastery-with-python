@@ -242,19 +242,6 @@ def zero_rule_algorithm_for_regression(training_dataset, test_dataset):
     return predictions_on_test_dataset
 
 
-def evaluate_algorithm_with_train_test_split(dataset, algorithm, split_percentage, *args):
-    training_dataset, test_dataset_with_predictions = train_test_split(dataset, split_percentage)
-    test_dataset = dataset_with_predictions_cleared_out(test_dataset_with_predictions)
-    predictions_by_algorithm_on_test_dataset = algorithm(training_dataset, test_dataset, *args)
-    prediction_column_index = -1
-    correct_predictions_for_test_dataset = [row[prediction_column_index] for row in test_dataset_with_predictions]
-    accuracy_of_algorithm = \
-        calculate_classification_accuracy(predictions_by_algorithm_on_test_dataset,
-                                          correct_predictions_for_test_dataset)
-    print('Accuracy for algorithm: %.3f%%\n' % accuracy_of_algorithm)
-    return accuracy_of_algorithm
-
-
 def dataset_with_predictions_cleared_out(dataset):
     dataset_without_predictions = list()
     for row in dataset:
@@ -265,11 +252,65 @@ def dataset_with_predictions_cleared_out(dataset):
     return dataset_without_predictions
 
 
+def evaluate_algorithm_with_train_test_split(dataset, algorithm, split_percentage, *args):
+    training_dataset, test_dataset_with_predictions = train_test_split(dataset, split_percentage)
+    test_dataset = dataset_with_predictions_cleared_out(test_dataset_with_predictions)
+    predictions_by_algorithm_on_test_dataset = algorithm(training_dataset, test_dataset, *args)
+    prediction_column_index = -1
+    correct_predictions_for_test_dataset = [row[prediction_column_index] for row in test_dataset_with_predictions]
+    accuracy_of_algorithm = \
+        calculate_classification_accuracy(predictions_by_algorithm_on_test_dataset,
+                                          correct_predictions_for_test_dataset)
+    print('Accuracy for algorithm using {0}% test/training split: '.format(train_test_split_percentage * 100))
+    print('%.3f%%\n' % accuracy_of_algorithm)
+    return accuracy_of_algorithm
+
+
+def evaluate_algorithm_with_k_fold_cross_validation(dataset, algorithm, num_folds, *args):
+    folds = generate_cross_validation_split_data_folds(dataset, num_folds)
+    algorithm_accuracy_on_each_fold = list()
+    for test_fold in folds:
+        training_dataset_folds = list(folds)
+        training_dataset_folds.remove(test_fold)
+        training_dataset = sum(training_dataset_folds, [])
+        test_dataset = dataset_with_predictions_cleared_out(test_fold)
+        predictions_by_algorithm_on_test_dataset = algorithm(training_dataset, test_dataset, *args)
+        prediction_column_index = -1
+        correct_predictions_for_test_dataset = [row[prediction_column_index] for row in test_fold]
+        accuracy_of_algorithm_on_current_fold = \
+            calculate_classification_accuracy(predictions_by_algorithm_on_test_dataset,
+                                              correct_predictions_for_test_dataset)
+        algorithm_accuracy_on_each_fold.append(accuracy_of_algorithm_on_current_fold)
+    print('Accuracy for algorithm over {0} folds:'.format(num_folds))
+    print(' '.join(str('%.3f%%' % accuracy) for accuracy in algorithm_accuracy_on_each_fold))
+    print('Mean accuracy: %.3f%%' % (sum(algorithm_accuracy_on_each_fold) / num_folds))
+
+
 seed(1)  # Ensure that results are always the same
 
+train_test_split_percentage = 0.6
+num_cross_validation_folds = 5
+
 normalized_pima_dataset = preprocess_and_normalize_pima_indians_diabetes_dataset()
-evaluate_algorithm_with_train_test_split(normalized_pima_dataset, zero_rule_algorithm_for_classification, 0.6)
+evaluate_algorithm_with_train_test_split(
+    normalized_pima_dataset,
+    zero_rule_algorithm_for_classification,
+    train_test_split_percentage
+)
+evaluate_algorithm_with_k_fold_cross_validation(
+    normalized_pima_dataset,
+    zero_rule_algorithm_for_classification,
+    num_cross_validation_folds
+)
 
 standardized_pima_dataset = preprocess_and_standardize_pima_indians_diabetes_dataset()
-evaluate_algorithm_with_train_test_split(normalized_pima_dataset, zero_rule_algorithm_for_classification, 0.6)
-
+evaluate_algorithm_with_train_test_split(
+    standardized_pima_dataset,
+    zero_rule_algorithm_for_classification,
+    train_test_split_percentage
+)
+evaluate_algorithm_with_k_fold_cross_validation(
+    standardized_pima_dataset,
+    zero_rule_algorithm_for_classification,
+    num_cross_validation_folds
+)
