@@ -190,6 +190,15 @@ def pretty_print_confusion_matrix(unique_classes, confusion_matrix):
         print("%s| %s" % (a_class, ' '.join(str(count) for count in confusion_matrix[row_index])))
 
 
+def calculate_mean_absolute_error(actual_values, predicted_values):
+    sum_of_absolute_error_deltas = 0.0
+    for index in range(len(actual_values)):
+        sum_of_absolute_error_deltas += abs(predicted_values[index] - actual_values[index])
+    mean_absolute_error = sum_of_absolute_error_deltas / float(len(actual_values))
+    print('Mean absolute error: {0}'.format(mean_absolute_error))
+    return mean_absolute_error
+
+
 seed(1)  # Ensure that results are always the same
 
 normalized_pima_dataset = preprocess_and_normalize_pima_indians_diabetes_dataset()
