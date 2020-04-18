@@ -195,7 +195,7 @@ def calculate_mean_absolute_error(actual_values, predicted_values):
     for index in range(len(actual_values)):
         sum_of_absolute_error_deltas += abs(predicted_values[index] - actual_values[index])
     mean_absolute_error = sum_of_absolute_error_deltas / float(len(actual_values))
-    print('Mean absolute error: {0}'.format(mean_absolute_error))
+    print('Mean absolute error: {0}\n'.format(mean_absolute_error))
     return mean_absolute_error
 
 
@@ -206,7 +206,7 @@ def calculate_root_mean_squared_error(actual_values, predicted_values):
         sum_of_squared_error_deltas += error_delta ** 2
     mean_squared_error_delta = sum_of_squared_error_deltas / float(len(actual_values))
     root_mean_squared_error = sqrt(mean_squared_error_delta)
-    print('Root mean squared error: {0}'.format(root_mean_squared_error))
+    print('Root mean squared error: {0}\n'.format(root_mean_squared_error))
     return root_mean_squared_error
 
 
