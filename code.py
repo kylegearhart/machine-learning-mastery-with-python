@@ -180,8 +180,14 @@ def generate_confusion_matrix(actual_classes, predicted_classes):
         row_index = class_to_index_lookup_table[actual_classes[index]]
         column_index = class_to_index_lookup_table[predicted_classes[index]]
         confusion_matrix[row_index][column_index] += 1
-    print('Confusion matrix: {0}\nusing unique classes: {1}\n'.format(confusion_matrix, unique_classes))
+    pretty_print_confusion_matrix(unique_classes, confusion_matrix)
     return unique_classes, confusion_matrix
+
+
+def pretty_print_confusion_matrix(unique_classes, confusion_matrix):
+    print('Confusion matrix:')
+    for row_index, a_class in enumerate(unique_classes):
+        print("%s| %s" % (a_class, ' '.join(str(count) for count in confusion_matrix[row_index])))
 
 
 seed(1)  # Ensure that results are always the same
