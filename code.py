@@ -163,7 +163,25 @@ def calculate_classification_accuracy(actual_classes, predicted_classes):
     for index in range(len(actual_classes)):
         if actual_classes[index] == predicted_classes[index]:
             num_of_correct_classifications += 1
-    return num_of_correct_classifications / float(len(actual_classes)) * 100.0
+    classification_accuracy = num_of_correct_classifications / float(len(actual_classes)) * 100.0
+    print('Classification accuracy: {0}%\n'.format(classification_accuracy))
+    return classification_accuracy
+
+
+def generate_confusion_matrix(actual_classes, predicted_classes):
+    unique_classes = set(actual_classes)
+    confusion_matrix = [list() for _ in range(len(unique_classes))]
+    for class_index in range(len(unique_classes)):
+        confusion_matrix[class_index] = [0 for _ in range(len(unique_classes))]
+    class_to_index_lookup_table = dict()
+    for class_index, a_class in enumerate(unique_classes):
+        class_to_index_lookup_table[a_class] = class_index
+    for index in range(len(actual_classes)):
+        row_index = class_to_index_lookup_table[actual_classes[index]]
+        column_index = class_to_index_lookup_table[predicted_classes[index]]
+        confusion_matrix[row_index][column_index] += 1
+    print('Confusion matrix: {0}\nusing unique classes: {1}\n'.format(confusion_matrix, unique_classes))
+    return unique_classes, confusion_matrix
 
 
 seed(1)  # Ensure that results are always the same
