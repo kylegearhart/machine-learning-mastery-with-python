@@ -143,18 +143,18 @@ def train_test_split(dataset, split_percentage=0.60):
     return training_data_rows, test_data_rows
 
 
-def generate_cross_validation_split_data_folds(dataset, num_of_folds=3):
+def generate_cross_validation_split_data_folds(dataset, num_folds=3):
     dataset_folds = list()
     dataset_copy = list(dataset)
-    target_num_rows_in_each_fold = int(len(dataset) / num_of_folds)
-    for fold_index in range(num_of_folds):
+    target_num_rows_in_each_fold = int(len(dataset) / num_folds)
+    for _ in range(num_folds):
         current_fold = list()
         while len(current_fold) < target_num_rows_in_each_fold:
             random_row_index = randrange(len(dataset_copy))
             current_fold.append(dataset_copy.pop(random_row_index))
         dataset_folds.append(current_fold)
     print('Split {0}-row dataset into {1} folds with {2} rows each:\n({3} rows are being left out of the data folds)\n'
-          .format(len(dataset), num_of_folds, target_num_rows_in_each_fold, int(len(dataset) % num_of_folds)))
+          .format(len(dataset), num_folds, target_num_rows_in_each_fold, int(len(dataset) % num_folds)))
     return dataset_folds
 
 
