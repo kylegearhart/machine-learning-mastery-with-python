@@ -158,6 +158,14 @@ def generate_cross_validation_split_data_folds(dataset, num_of_folds=3):
     return dataset_folds
 
 
+def calculate_classification_accuracy(actual_classes, predicted_classes):
+    num_of_correct_classifications = 0
+    for index in range(len(actual_classes)):
+        if actual_classes[index] == predicted_classes[index]:
+            num_of_correct_classifications += 1
+    return num_of_correct_classifications / float(len(actual_classes)) * 100.0
+
+
 seed(1)  # Ensure that results are always the same
 
 normalized_pima_dataset = preprocess_and_normalize_pima_indians_diabetes_dataset()
