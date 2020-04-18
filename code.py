@@ -231,6 +231,17 @@ def zero_rule_algorithm_for_classification(training_dataset, test_dataset):
     return predictions_on_test_dataset
 
 
+def zero_rule_algorithm_for_regression(training_dataset, test_dataset):
+    last_column_index = -1
+    all_predicted_values_in_training_dataset = [row[last_column_index] for row in training_dataset]
+    mean_of_predicted_values = \
+        sum(all_predicted_values_in_training_dataset) / float(len(all_predicted_values_in_training_dataset))
+    predictions_on_test_dataset = [mean_of_predicted_values for _ in range(len(test_dataset))]
+    print('Zero-Rule predictions on test dataset (regression/mean predicted value):\n{0}\n'
+          .format(predictions_on_test_dataset))
+    return predictions_on_test_dataset
+
+
 seed(1)  # Ensure that results are always the same
 
 normalized_pima_dataset = preprocess_and_normalize_pima_indians_diabetes_dataset()
