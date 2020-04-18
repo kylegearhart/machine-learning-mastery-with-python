@@ -222,6 +222,15 @@ def random_prediction_algorithm(training_dataset, test_dataset):
     return random_predictions_on_test_dataset
 
 
+def zero_rule_algorithm_for_classification(training_dataset, test_dataset):
+    last_column_index = -1
+    all_classes_in_training_dataset = [row[last_column_index] for row in training_dataset]
+    most_common_class = max(set(all_classes_in_training_dataset), key=all_classes_in_training_dataset.count)
+    predictions_on_test_dataset = [most_common_class for _ in range(len(test_dataset))]
+    print('Zero-Rule predictions on test dataset: {0}\n'.format(predictions_on_test_dataset))
+    return predictions_on_test_dataset
+
+
 seed(1)  # Ensure that results are always the same
 
 normalized_pima_dataset = preprocess_and_normalize_pima_indians_diabetes_dataset()
