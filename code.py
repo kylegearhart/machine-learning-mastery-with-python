@@ -130,6 +130,12 @@ def preprocess_iris_flowers_dataset():
     return dataset
 
 
+def preprocess_swedish_auto_insurance_dataset():
+    dataset = load_dataset_csv_file('datasets/swedish-auto-insurance.data.csv')
+    convert_data_to_floats_in_column_range(dataset, range(len(dataset[0])))
+    return dataset
+
+
 def train_test_split(dataset, split_percentage=0.60):
     training_data_rows = list()
     target_num_training_data_rows = split_percentage * len(dataset)
@@ -165,6 +171,10 @@ def calculate_classification_accuracy(actual_classes, predicted_classes):
             num_of_correct_classifications += 1
     classification_accuracy = num_of_correct_classifications / float(len(actual_classes)) * 100.0
     return classification_accuracy
+
+
+def calculate_regression_prediction_accuracy(actual_values, predicted_values):
+    return calculate_root_mean_squared_error(actual_values, predicted_values)
 
 
 def generate_confusion_matrix(actual_classes, predicted_classes):
@@ -242,6 +252,41 @@ def zero_rule_algorithm_for_regression(training_dataset, test_dataset):
     return predictions_on_test_dataset
 
 
+def simple_linear_regression(training_dataset, test_dataset):
+    y_predictions = list()
+    intercept, b1 = linear_coefficients(training_dataset)
+    for row in test_dataset:
+        x_value = row[0]
+        predicted_y = intercept + b1 * x_value
+        y_predictions.append(predicted_y)
+    return y_predictions
+
+
+def linear_coefficients(two_column_dataset):
+    x_values = [row[0] for row in two_column_dataset]
+    y_values = [row[1] for row in two_column_dataset]
+    x_mean, y_mean = mean(x_values), mean(y_values)
+    b1 = covariance(x_values, x_mean, y_values, y_mean) / variance(x_values, x_mean)
+    intercept = y_mean - b1 * x_mean
+    return [intercept, b1]
+
+
+def covariance(x_values, mean_x, y_values, mean_y):
+    result = 0.0
+    for index in range(len(x_values)):
+        result += ((x_values[index] - mean_x) * (y_values[index] - mean_y))
+    return result
+
+
+def variance(values, mean_of_values):
+    value_distances_from_mean_squared = [(value - mean_of_values) ** 2 for value in values]
+    return sum(value_distances_from_mean_squared)
+
+
+def mean(values):
+    return sum(values) / float(len(values))
+
+
 def dataset_with_predictions_cleared_out(dataset):
     dataset_without_predictions = list()
     for row in dataset:
@@ -250,6 +295,20 @@ def dataset_with_predictions_cleared_out(dataset):
         row_copy[prediction_column_index] = None
         dataset_without_predictions.append(row_copy)
     return dataset_without_predictions
+
+
+def evaluate_regression_algorithm_using_training_dataset(training_dataset, algorithm, *args):
+    copy_of_training_dataset = training_dataset
+    test_dataset_with_predictions = copy_of_training_dataset
+    test_dataset = dataset_with_predictions_cleared_out(test_dataset_with_predictions)
+    predictions_by_algorithm_on_test_dataset = algorithm(training_dataset, test_dataset, *args)
+    print('Predictions made by regression algorithm: \n{0}'.format(predictions_by_algorithm_on_test_dataset))
+    prediction_column_index = -1
+    correct_predictions_for_test_dataset = [row[prediction_column_index] for row in test_dataset_with_predictions]
+    root_mean_squared_error = \
+        calculate_regression_prediction_accuracy(predictions_by_algorithm_on_test_dataset,
+                                                 correct_predictions_for_test_dataset)
+    return root_mean_squared_error
 
 
 def evaluate_algorithm_with_train_test_split(dataset, algorithm, split_percentage, *args):
@@ -313,4 +372,10 @@ evaluate_algorithm_with_k_fold_cross_validation(
     standardized_pima_dataset,
     zero_rule_algorithm_for_classification,
     num_cross_validation_folds
+)
+
+swedish_auto_insurance_dataset = preprocess_swedish_auto_insurance_dataset()
+evaluate_regression_algorithm_using_training_dataset(
+    swedish_auto_insurance_dataset,
+    simple_linear_regression
 )
