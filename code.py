@@ -215,7 +215,7 @@ def calculate_root_mean_squared_error(actual_values, predicted_values):
         sum_of_squared_error_deltas += error_delta ** 2
     mean_squared_error_delta = sum_of_squared_error_deltas / float(len(actual_values))
     root_mean_squared_error = sqrt(mean_squared_error_delta)
-    print('Root mean squared error: {0}\n'.format(root_mean_squared_error))
+    print('Root mean squared error: %.3f\n' % root_mean_squared_error)
     return root_mean_squared_error
 
 
@@ -342,7 +342,7 @@ def evaluate_algorithm_with_k_fold_cross_validation(dataset, algorithm, num_fold
         algorithm_accuracy_on_each_fold.append(accuracy_of_algorithm_on_current_fold)
     print('Accuracy for algorithm over {0} folds:'.format(num_folds))
     print(' '.join(str('%.3f%%' % accuracy) for accuracy in algorithm_accuracy_on_each_fold))
-    print('Mean accuracy: %.3f%%' % (sum(algorithm_accuracy_on_each_fold) / num_folds))
+    print('Mean accuracy: %.3f%%\n' % (sum(algorithm_accuracy_on_each_fold) / num_folds))
 
 
 seed(1)  # Ensure that results are always the same
