@@ -1,10 +1,26 @@
 import unittest
 
-from src.algorithms.classification_algorithms import predict_with_multivariate_linear_regression
+from src.algorithms.classification_algorithms import predict_with_multivariate_linear_regression, \
+    stochastic_gradient_descent_coefficients
 
 
 class MyTestCase(unittest.TestCase):
-    def test_multivariate_linear_regression(self):
+    def test_stochastic_gradient_descent_coefficient_calculation(self):
+        dataset = [[1, 1], [2, 3], [4, 3], [3, 2], [5, 5]]
+        learning_rate = 0.001
+        num_of_epochs = 50
+
+        actual_coefficients = stochastic_gradient_descent_coefficients(dataset, learning_rate, num_of_epochs)
+
+        expected_coefficients = [0.22998, 0.80172]
+        for index in range(len(actual_coefficients)):
+            self.assertAlmostEqual(
+                actual_coefficients[index],
+                expected_coefficients[index],
+                delta=0.00001
+            )
+
+    def test_multivariate_linear_regression_prediction(self):
         dataset = [[1, 1], [2, 3], [4, 3], [3, 2], [5, 5]]
         coefficients = [0.4, 0.8]
 
@@ -16,10 +32,10 @@ class MyTestCase(unittest.TestCase):
 
         expected_predictions = [1.2, 2, 3.6, 2.8, 4.4]
         for index in range(len(actual_predictions)):
-            self.assertAlmostEquals(
+            self.assertAlmostEqual(
                 actual_predictions[index],
                 expected_predictions[index],
-                delta=0.0001
+                delta=0.1
             )
 
 
