@@ -1,6 +1,6 @@
 from random import randrange
 
-from statistics_utilities import calculate_root_mean_squared_error, calculate_percentage_correct
+from src.statistics_utilities import calculate_root_mean_squared_error, calculate_percentage_correct
 
 
 def evaluate_regression_algorithm_using_training_dataset(training_dataset, algorithm, *args):

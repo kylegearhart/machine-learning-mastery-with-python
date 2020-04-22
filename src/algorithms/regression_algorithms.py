@@ -1,4 +1,4 @@
-from statistics_utilities import mean, covariance, variance
+from src.statistics_utilities import mean, covariance, variance
 
 
 def zero_rule_algorithm_for_regression(training_dataset, test_dataset):

@@ -1,7 +1,7 @@
 from _csv import reader
 from math import sqrt
 
-from logging import print_first_five_rows_of_data
+from src.logging import print_first_five_rows_of_data
 
 
 def preprocess_and_normalize_pima_indians_diabetes_dataset():

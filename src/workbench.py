@@ -1,11 +1,11 @@
 from random import seed
 
-from algorithm_evaluation import evaluate_algorithm_with_train_test_split, \
+from src.algorithm_evaluation import evaluate_algorithm_with_train_test_split, \
     evaluate_algorithm_with_k_fold_cross_validation, evaluate_regression_algorithm_using_training_dataset
-from algorithms.classification_algorithms import zero_rule_algorithm_for_classification
-from data_preprocessing import preprocess_and_normalize_pima_indians_diabetes_dataset, \
+from src.algorithms.classification_algorithms import zero_rule_algorithm_for_classification
+from src.data_preprocessing import preprocess_and_normalize_pima_indians_diabetes_dataset, \
     preprocess_and_standardize_pima_indians_diabetes_dataset, preprocess_swedish_auto_insurance_dataset
-from algorithms.regression_algorithms import simple_linear_regression
+from src.algorithms.regression_algorithms import simple_linear_regression
 
 seed(1)  # Ensure that results are always the same
 
