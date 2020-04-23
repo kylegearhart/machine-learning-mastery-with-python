@@ -32,6 +32,12 @@ def preprocess_swedish_auto_insurance_dataset():
     return dataset
 
 
+def preprocess_and_normalize_wine_quality_white_dataset():
+    dataset = load_dataset_csv_file('datasets/wine-quality-white.data.csv')
+    convert_data_to_floats_in_column_range(dataset, range(len(dataset[0])))
+    return normalize_dataset(dataset, dataset_minmax(dataset))
+
+
 def load_dataset_csv_file(file_path):
     rows = list()
     with open(file_path, 'r') as file:

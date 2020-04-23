@@ -8,6 +8,16 @@ def zero_rule_algorithm_for_classification(training_dataset, test_dataset):
     return predictions_on_test_dataset
 
 
+def linear_regression_with_stochastic_gradient_descent(training_dataset, test_dataset, learning_rate, num_of_epochs):
+    predictions = list()
+    coefficients = stochastic_gradient_descent_coefficients(training_dataset, learning_rate, num_of_epochs)
+
+    for row in test_dataset:
+        prediction = predict_with_multivariate_linear_regression(row, coefficients)
+        predictions.append(prediction)
+    return predictions
+
+
 def stochastic_gradient_descent_coefficients(training_dataset, learning_rate, num_of_epochs):
     intercept_coefficient_index = 0
     correct_value_column_index = -1
