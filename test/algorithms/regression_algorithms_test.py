@@ -1,7 +1,7 @@
 import unittest
 
-from src.algorithms.classification_algorithms import predict_with_multivariate_linear_regression, \
-    stochastic_gradient_descent_coefficients
+from src.algorithms.regression_algorithms import stochastic_gradient_descent_coefficients, \
+    predict_with_multivariate_linear_regression
 
 
 class MyTestCase(unittest.TestCase):
