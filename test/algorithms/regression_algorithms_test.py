@@ -10,7 +10,8 @@ class MyTestCase(unittest.TestCase):
         learning_rate = 0.001
         num_of_epochs = 50
 
-        actual_coefficients = stochastic_gradient_descent_coefficients(dataset, learning_rate, num_of_epochs)
+        actual_coefficients = stochastic_gradient_descent_coefficients(dataset, learning_rate, num_of_epochs,
+                                                                       predict_with_multivariate_linear_regression)
 
         expected_coefficients = [0.22998, 0.80172]
         for index in range(len(actual_coefficients)):
