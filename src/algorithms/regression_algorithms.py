@@ -35,7 +35,8 @@ def linear_coefficients(two_column_dataset):
 def linear_regression_with_stochastic_gradient_descent(training_dataset, test_dataset, learning_rate, num_of_epochs):
     predictions = list()
     coefficients = stochastic_gradient_descent_coefficients(training_dataset, learning_rate, num_of_epochs,
-                                                            predict_with_multivariate_linear_regression)
+                                                            predict_with_multivariate_linear_regression,
+                                                            update_coefficients_with_linear_regression())
 
     for row in test_dataset:
         prediction = predict_with_multivariate_linear_regression(row, coefficients)
@@ -49,3 +50,11 @@ def predict_with_multivariate_linear_regression(row, coefficients):
     for value_index in range(len(row) - 1):
         prediction += coefficients[value_index + 1] * row[value_index]
     return prediction
+
+
+def update_coefficients_with_linear_regression(coefficients, data_row, learning_rate, error):
+    intercept_coefficient_index = 0
+    coefficients[intercept_coefficient_index] = \
+        coefficients[intercept_coefficient_index] - learning_rate * error
+    for index in range(len(data_row) - 1):
+        coefficients[index + 1] = coefficients[index + 1] - learning_rate * error * data_row[index]

@@ -17,7 +17,6 @@ def predict_with_logistic_regression_classification(row, coefficients):
     prediction_as_float = intercept
     for value_index in range(len(row) - 1):
         prediction_as_float += coefficients[value_index + 1] * row[value_index]
-    prediction_as_float = 1.0 / (1.0 + exp(-prediction_as_float))
 
-    prediction_as_class = round(prediction_as_float)
-    return prediction_as_class
+    prediction_as_float = 1.0 / (1.0 + exp(-prediction_as_float))
+    return prediction_as_float

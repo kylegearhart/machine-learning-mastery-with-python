@@ -1,17 +1,18 @@
 import unittest
 
 from src.algorithms.regression_algorithms import stochastic_gradient_descent_coefficients, \
-    predict_with_multivariate_linear_regression
+    predict_with_multivariate_linear_regression, update_coefficients_with_linear_regression
 
 
 class MyTestCase(unittest.TestCase):
-    def test_stochastic_gradient_descent_coefficient_calculation(self):
+    def test_stochastic_gradient_descent_with_linear_regression_prediction(self):
         dataset = [[1, 1], [2, 3], [4, 3], [3, 2], [5, 5]]
         learning_rate = 0.001
         num_of_epochs = 50
 
         actual_coefficients = stochastic_gradient_descent_coefficients(dataset, learning_rate, num_of_epochs,
-                                                                       predict_with_multivariate_linear_regression)
+                                                                       predict_with_multivariate_linear_regression,
+                                                                       update_coefficients_with_linear_regression)
 
         expected_coefficients = [0.22998, 0.80172]
         for index in range(len(actual_coefficients)):
