@@ -4,40 +4,6 @@ from math import sqrt
 from src.logging import print_first_five_rows_of_data
 
 
-def preprocess_and_normalize_pima_indians_diabetes_dataset():
-    dataset = load_dataset_csv_file('datasets/pima-indians-diabetes.data.csv')
-    convert_data_to_floats_in_column_range(dataset,
-                                           range(0, len(dataset[0])))
-    return normalize_dataset(dataset, dataset_minmax(dataset))
-
-
-def preprocess_and_standardize_pima_indians_diabetes_dataset():
-    dataset = load_dataset_csv_file('datasets/pima-indians-diabetes.data.csv')
-    convert_data_to_floats_in_column_range(dataset,
-                                           range(0, len(dataset[0])))
-    column_means = column_means_for(dataset)
-    column_stdevs = column_stdevs_for(dataset, column_means)
-    return standardize_dataset(dataset, column_means, column_stdevs)
-
-
-def preprocess_iris_flowers_dataset():
-    dataset = load_dataset_csv_file('datasets/iris-species.data.csv')
-    convert_string_class_names_to_ints_for_column(dataset, 4)
-    return dataset
-
-
-def preprocess_swedish_auto_insurance_dataset():
-    dataset = load_dataset_csv_file('datasets/swedish-auto-insurance.data.csv')
-    convert_data_to_floats_in_column_range(dataset, range(len(dataset[0])))
-    return dataset
-
-
-def preprocess_and_normalize_white_wine_quality_dataset():
-    dataset = load_dataset_csv_file('datasets/white-wine-quality.data.csv')
-    convert_data_to_floats_in_column_range(dataset, range(len(dataset[0])))
-    return normalize_dataset(dataset, dataset_minmax(dataset))
-
-
 def load_dataset_csv_file(file_path):
     rows = list()
     with open(file_path, 'r') as file:
