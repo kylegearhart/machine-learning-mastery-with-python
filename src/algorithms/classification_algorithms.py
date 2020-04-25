@@ -1,5 +1,7 @@
 from math import exp
 
+from src.algorithms.stochastic_gradient_descent import stochastic_gradient_descent_coefficients
+
 
 def zero_rule_algorithm_for_classification(training_dataset, test_dataset):
     last_column_index = -1
@@ -11,6 +13,19 @@ def zero_rule_algorithm_for_classification(training_dataset, test_dataset):
     return predictions_on_test_dataset
 
 
+def logistic_regression_with_stochastic_gradient_descent(training_dataset, test_dataset, learning_rate, num_of_epochs):
+    predicted_classes = list()
+    coefficients = stochastic_gradient_descent_coefficients(training_dataset, learning_rate, num_of_epochs,
+                                                            predict_with_logistic_regression_classification,
+                                                            update_coefficients_with_logistic_regression)
+
+    for row in test_dataset:
+        prediction = predict_with_logistic_regression_classification(row, coefficients)
+        predicted_class = round(prediction)
+        predicted_classes.append(predicted_class)
+    return predicted_classes
+
+
 def predict_with_logistic_regression_classification(row, coefficients):
     intercept = coefficients[0]
 
@@ -20,3 +35,14 @@ def predict_with_logistic_regression_classification(row, coefficients):
 
     prediction_as_float = 1.0 / (1.0 + exp(-prediction_as_float))
     return prediction_as_float
+
+
+def update_coefficients_with_logistic_regression(coefficients, data_row, learning_rate, predicted_value,
+                                                 correct_value_column_index):
+    error = data_row[correct_value_column_index] - predicted_value
+    intercept_coefficient_index = 0
+    coefficients[intercept_coefficient_index] = \
+        coefficients[intercept_coefficient_index] + learning_rate * error * predicted_value * (1.0 - predicted_value)
+    for index in range(len(data_row) - 1):
+        coefficients[index + 1] = coefficients[index + 1] + learning_rate * error * predicted_value * \
+                                  (1.0 - predicted_value) * data_row[index]

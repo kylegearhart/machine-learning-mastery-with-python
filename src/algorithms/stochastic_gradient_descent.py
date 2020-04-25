@@ -10,6 +10,6 @@ def stochastic_gradient_descent_coefficients(training_dataset, learning_rate, nu
             prediction = prediction_fn(row, coefficients)
             error = prediction - row[correct_value_column_index]
             error_squared_sum += error ** 2
-            coefficient_update_fn(coefficients, row, learning_rate, error)
+            coefficient_update_fn(coefficients, row, learning_rate, prediction, correct_value_column_index)
         print('>epoch=%d, learning_rate=%.3f, error=%.3f' % (epoch, learning_rate, error_squared_sum))
     return coefficients

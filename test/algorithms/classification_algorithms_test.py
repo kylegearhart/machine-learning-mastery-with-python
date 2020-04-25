@@ -1,6 +1,7 @@
 import unittest
 
-from src.algorithms.classification_algorithms import predict_with_logistic_regression_classification
+from src.algorithms.classification_algorithms import predict_with_logistic_regression_classification, \
+    update_coefficients_with_logistic_regression
 from src.algorithms.stochastic_gradient_descent import stochastic_gradient_descent_coefficients
 
 
@@ -14,7 +15,8 @@ class MyTestCase(unittest.TestCase):
         num_of_epochs = 100
 
         actual_coefficients = stochastic_gradient_descent_coefficients(dataset, learning_rate, num_of_epochs,
-                                                                       predict_with_logistic_regression_classification)
+                                                                       predict_with_logistic_regression_classification,
+                                                                       update_coefficients_with_logistic_regression)
 
         expected_coefficients = [-0.8596443546618897, 1.5223825112460005, -2.218700210565016]
         for index in range(len(actual_coefficients)):
