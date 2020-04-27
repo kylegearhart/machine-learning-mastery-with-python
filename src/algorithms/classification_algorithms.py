@@ -48,6 +48,19 @@ def update_coefficients_with_logistic_regression(coefficients, data_row, learnin
                                   (1.0 - predicted_value) * data_row[index]
 
 
+def single_perceptron_with_stochastic_gradient_descent(training_dataset, test_dataset, learning_rate,
+                                                       num_of_epochs):
+    predicted_classes = list()
+    weights = stochastic_gradient_descent(training_dataset, learning_rate, num_of_epochs,
+                                          predict_with_single_perceptron_classification,
+                                          update_weights_with_single_perceptron)
+
+    for row in test_dataset:
+        predicted_class = predict_with_single_perceptron_classification(row, weights)
+        predicted_classes.append(predicted_class)
+    return predicted_classes
+
+
 def predict_with_single_perceptron_classification(row, weights):
     activation = weights[0]
     for data_value_index in range(len(row) - 1):
