@@ -46,3 +46,10 @@ def update_coefficients_with_logistic_regression(coefficients, data_row, learnin
     for index in range(len(data_row) - 1):
         coefficients[index + 1] = coefficients[index + 1] + learning_rate * error * predicted_value * \
                                   (1.0 - predicted_value) * data_row[index]
+
+
+def predict_with_single_perceptron_classification(row, weights):
+    activation = weights[0]
+    for data_value_index in range(len(row) - 1):
+        activation += weights[data_value_index + 1] * row[data_value_index]
+    return 1.0 if activation >= 0.0 else 0.0
