@@ -1,4 +1,4 @@
-from src.algorithms.stochastic_gradient_descent import stochastic_gradient_descent_coefficients
+from src.algorithms.stochastic_gradient_descent import stochastic_gradient_descent
 from src.statistics_utilities import mean, covariance, variance
 
 
@@ -34,9 +34,9 @@ def linear_coefficients(two_column_dataset):
 
 def linear_regression_with_stochastic_gradient_descent(training_dataset, test_dataset, learning_rate, num_of_epochs):
     predictions = list()
-    coefficients = stochastic_gradient_descent_coefficients(training_dataset, learning_rate, num_of_epochs,
-                                                            predict_with_multivariate_linear_regression,
-                                                            update_coefficients_with_linear_regression)
+    coefficients = stochastic_gradient_descent(training_dataset, learning_rate, num_of_epochs,
+                                               predict_with_multivariate_linear_regression,
+                                               update_coefficients_with_linear_regression)
 
     for row in test_dataset:
         prediction = predict_with_multivariate_linear_regression(row, coefficients)
