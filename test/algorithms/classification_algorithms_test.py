@@ -2,7 +2,7 @@ import unittest
 
 from src.algorithms.classification_algorithms import predict_with_logistic_regression_classification, \
     update_coefficients_with_logistic_regression, predict_with_single_perceptron_classification, \
-    update_weights_with_single_perceptron, calculate_gini_index
+    update_weights_with_single_perceptron, calculate_gini_index, split_dataset_on
 from src.algorithms.stochastic_gradient_descent import stochastic_gradient_descent
 
 
@@ -98,6 +98,17 @@ class MyTestCase(unittest.TestCase):
         perfect_class_groupings = [[[1, 0], [0, 0]], [[1, 1], [0, 1]]]
 
         self.assertEqual(calculate_gini_index(perfect_class_groupings, class_list), 0.0)
+
+    def test_split_dataset(self):
+        property_index_to_split_on = 0
+        property_threshold_value_to_split_on = 5
+        dataset = [[2], [4], [5], [6], [9], [10]]
+
+        left_subtree, right_subtree = split_dataset_on(property_index_to_split_on, property_threshold_value_to_split_on,
+                                                       dataset)
+
+        self.assertEqual(left_subtree, [[2], [4]])
+        self.assertEqual(right_subtree, [[5], [6], [9], [10]])
 
 
 if __name__ == '__main__':

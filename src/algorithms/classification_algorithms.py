@@ -102,3 +102,15 @@ def calculate_gini_index(class_groupings, class_list):
         gini_index += weighted_gini_index_for_group
 
     return gini_index
+
+
+def split_dataset_on(property_index_to_split_on, property_threshold_value_to_split_on, dataset):
+    left_subtree, right_subtree = list(), list()
+
+    for data_row in dataset:
+        if data_row[property_index_to_split_on] < property_threshold_value_to_split_on:
+            left_subtree.append(data_row)
+        else:
+            right_subtree.append(data_row)
+
+    return left_subtree, right_subtree
