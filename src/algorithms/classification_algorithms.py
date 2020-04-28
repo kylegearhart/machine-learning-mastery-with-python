@@ -79,6 +79,28 @@ def update_weights_with_single_perceptron(weights, data_row, learning_rate, pred
     return weights
 
 
+def determine_optimal_split_property_and_threshold(dataset):
+    all_unique_classes_in_dataset = list(set(data_row[-1] for data_row in dataset))
+    num_properties_in_dataset = len(dataset[0]) - 1
+    best_property_index, best_threshold_value, best_gini_index, best_dataset_split = 999, 999, 999, None
+
+    for property_index in range(num_properties_in_dataset):
+        for data_row in dataset:
+            threshold_value_to_split_on = data_row[property_index]
+            dataset_split_attempt = split_dataset_on(property_index, threshold_value_to_split_on, dataset)
+            split_attempt_gini_index = calculate_gini_index(dataset_split_attempt, all_unique_classes_in_dataset)
+            print('X%d < %.3f Gini=%.3f' %
+                  ((property_index + 1), threshold_value_to_split_on, split_attempt_gini_index))
+
+            if split_attempt_gini_index < best_gini_index:
+                best_property_index, best_threshold_value, best_gini_index, best_dataset_split = \
+                    property_index, threshold_value_to_split_on, split_attempt_gini_index, dataset_split_attempt
+
+    print('Best Split: [X%d < %.3f]' % (best_property_index + 1, best_threshold_value))
+    return {'property_index_to_split_on': best_property_index, 'threshold_value': best_threshold_value,
+            'dataset_split': best_dataset_split}
+
+
 def calculate_gini_index(class_groupings, class_list):
     class_value_index = -1
     total_num_instances = float(sum([len(group) for group in class_groupings]))

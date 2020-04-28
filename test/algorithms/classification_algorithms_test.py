@@ -2,7 +2,8 @@ import unittest
 
 from src.algorithms.classification_algorithms import predict_with_logistic_regression_classification, \
     update_coefficients_with_logistic_regression, predict_with_single_perceptron_classification, \
-    update_weights_with_single_perceptron, calculate_gini_index, split_dataset_on
+    update_weights_with_single_perceptron, calculate_gini_index, split_dataset_on, \
+    determine_optimal_split_property_and_threshold
 from src.algorithms.stochastic_gradient_descent import stochastic_gradient_descent
 
 
@@ -109,6 +110,27 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(left_subtree, [[2], [4]])
         self.assertEqual(right_subtree, [[5], [6], [9], [10]])
+
+    def test_determine_optimal_split_attribute_and_threshold(self):
+        dataset = [[2.771244718, 1.784783929, 0], [1.728571309, 1.169761413, 0], [3.678319846, 2.81281357, 0],
+                   [3.961043357, 2.61995032, 0], [2.999208922, 2.209014212, 0], [7.497545867, 3.162953546, 1],
+                   [9.00220326, 3.339047188, 1], [7.444542326, 0.476683375, 1], [10.12493903, 3.234550982, 1],
+                   [6.642287351, 3.319983761, 1]]
+
+        actual_split_data = determine_optimal_split_property_and_threshold(dataset)
+
+        self.assertEqual(actual_split_data['property_index_to_split_on'], 0)
+        self.assertEqual(actual_split_data['threshold_value'], 6.642287351)
+        self.assertEqual(
+            actual_split_data['dataset_split'][0],
+            [[2.771244718, 1.784783929, 0], [1.728571309, 1.169761413, 0], [3.678319846, 2.81281357, 0],
+             [3.961043357, 2.61995032, 0], [2.999208922, 2.209014212, 0]]
+        )
+        self.assertEqual(
+            actual_split_data['dataset_split'][1],
+            [[7.497545867, 3.162953546, 1], [9.00220326, 3.339047188, 1], [7.444542326, 0.476683375, 1],
+             [10.12493903, 3.234550982, 1], [6.642287351, 3.319983761, 1]]
+        )
 
 
 if __name__ == '__main__':
