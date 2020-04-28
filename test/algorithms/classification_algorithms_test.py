@@ -2,7 +2,7 @@ import unittest
 
 from src.algorithms.classification_algorithms import predict_with_logistic_regression_classification, \
     update_coefficients_with_logistic_regression, predict_with_single_perceptron_classification, \
-    update_weights_with_single_perceptron
+    update_weights_with_single_perceptron, calculate_gini_index
 from src.algorithms.stochastic_gradient_descent import stochastic_gradient_descent
 
 
@@ -86,6 +86,18 @@ class MyTestCase(unittest.TestCase):
                 expected_weights[index],
                 delta=0.00000000000000001
             )
+
+    def test_gini_index_calculation_for_worst_case_class_groupings(self):
+        class_list = [0, 1]
+        perfect_class_groupings = [[[1, 1], [1, 0]], [[1, 1], [1, 0]]]
+
+        self.assertEqual(calculate_gini_index(perfect_class_groupings, class_list), 0.5)
+
+    def test_gini_index_calculation_for_best_case_class_groupings(self):
+        class_list = [0, 1]
+        perfect_class_groupings = [[[1, 0], [0, 0]], [[1, 1], [0, 1]]]
+
+        self.assertEqual(calculate_gini_index(perfect_class_groupings, class_list), 0.0)
 
 
 if __name__ == '__main__':

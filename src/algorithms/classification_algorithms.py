@@ -77,3 +77,28 @@ def update_weights_with_single_perceptron(weights, data_row, learning_rate, pred
         weights[index + 1] = weights[index + 1] + learning_rate * error * data_row[index]
 
     return weights
+
+
+def calculate_gini_index(class_groupings, class_list):
+    class_value_index = -1
+    total_num_instances = float(sum([len(group) for group in class_groupings]))
+
+    gini_index = 0.0
+    for grouping in class_groupings:
+        num_instances_in_grouping = float(len(grouping))
+
+        if num_instances_in_grouping == 0:
+            continue
+
+        sum_of_all_class_proportions_squared = 0.0
+        for a_class in class_list:
+            num_times_class_occurs_in_grouping = [instance[class_value_index] for instance in grouping].count(a_class)
+            class_proportion = num_times_class_occurs_in_grouping / num_instances_in_grouping
+            sum_of_all_class_proportions_squared += class_proportion * class_proportion
+
+        weighted_gini_index_for_group = (1.0 - sum_of_all_class_proportions_squared) * \
+                                        (num_instances_in_grouping / total_num_instances)
+
+        gini_index += weighted_gini_index_for_group
+
+    return gini_index
