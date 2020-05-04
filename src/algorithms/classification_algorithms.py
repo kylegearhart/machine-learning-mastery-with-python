@@ -136,3 +136,9 @@ def split_dataset_on(property_index_to_split_on, property_threshold_value_to_spl
             right_subtree.append(data_row)
 
     return left_subtree, right_subtree
+
+
+def terminal_node_class_value(terminal_node_dataset):
+    class_column_index = -1
+    classes_in_dataset = [row[class_column_index] for row in terminal_node_dataset]
+    return max(set(classes_in_dataset), key=classes_in_dataset.count)
