@@ -1,6 +1,7 @@
 from math import exp
 
 from src.algorithms.stochastic_gradient_descent import stochastic_gradient_descent
+from src.logging import print_tree_recursively
 
 
 def zero_rule_algorithm_for_classification(training_dataset, test_dataset):
@@ -79,6 +80,17 @@ def update_weights_with_single_perceptron(weights, data_row, learning_rate, pred
     return weights
 
 
+def decision_tree(training_dataset, test_dataset, max_tree_depth, min_num_rows_in_node_dataset):
+    tree = build_decision_tree(training_dataset, max_tree_depth, min_num_rows_in_node_dataset)
+
+    predictions = list()
+    for data_row in test_dataset:
+        prediction = predict_with_decision_tree(tree, data_row)
+        predictions.append(prediction)
+
+    return predictions
+
+
 def predict_with_decision_tree(node, data_row):
     if data_row[node['property_index_to_split_on']] < node['threshold_value']:
         if isinstance(node['left_subtree'], dict):
@@ -92,14 +104,15 @@ def predict_with_decision_tree(node, data_row):
             return node['right_subtree']
 
 
-def build_decision_tree(training_dataset, max_depth, min_size):
+def build_decision_tree(training_dataset, max_tree_depth, min_num_rows_in_node_dataset):
     root_node = create_tree_node_with_optimal_split(training_dataset)
-    create_sub_trees_for_node_at_depth(root_node, max_depth, min_size, 1)
+    create_sub_trees_for_node_at_depth(root_node, max_tree_depth, min_num_rows_in_node_dataset, 1)
+    print('Decision Tree:\n')
     print_tree_recursively(root_node)
     return root_node
 
 
-def create_sub_trees_for_node_at_depth(node, max_depth, min_size, depth):
+def create_sub_trees_for_node_at_depth(node, max_tree_depth, min_num_rows_in_node_dataset, depth):
     left_subtree_dataset, right_subtree_dataset = node['subtree_datasets']
     del (node['subtree_datasets'])
 
@@ -108,22 +121,24 @@ def create_sub_trees_for_node_at_depth(node, max_depth, min_size, depth):
             terminal_node_representing_dataset(left_subtree_dataset + right_subtree_dataset)
         return
 
-    if depth >= max_depth:
+    if depth >= max_tree_depth:
         node['left_subtree'] = terminal_node_representing_dataset(left_subtree_dataset)
         node['right_subtree'] = terminal_node_representing_dataset(right_subtree_dataset)
         return
 
-    if len(left_subtree_dataset) <= min_size:
+    if len(left_subtree_dataset) <= min_num_rows_in_node_dataset:
         node['left_subtree'] = terminal_node_representing_dataset(left_subtree_dataset)
     else:
         node['left_subtree'] = create_tree_node_with_optimal_split(left_subtree_dataset)
-        create_sub_trees_for_node_at_depth(node['left_subtree'], max_depth, min_size, depth + 1)
+        create_sub_trees_for_node_at_depth(node['left_subtree'], max_tree_depth, min_num_rows_in_node_dataset,
+                                           depth + 1)
 
-    if len(right_subtree_dataset) <= min_size:
+    if len(right_subtree_dataset) <= min_num_rows_in_node_dataset:
         node['right_subtree'] = terminal_node_representing_dataset(right_subtree_dataset)
     else:
         node['right_subtree'] = create_tree_node_with_optimal_split(right_subtree_dataset)
-        create_sub_trees_for_node_at_depth(node['right_subtree'], max_depth, min_size, depth + 1)
+        create_sub_trees_for_node_at_depth(node['right_subtree'], max_tree_depth, min_num_rows_in_node_dataset,
+                                           depth + 1)
 
 
 def create_tree_node_with_optimal_split(dataset):
@@ -143,7 +158,7 @@ def create_tree_node_with_optimal_split(dataset):
                 best_property_index, best_threshold_value, best_gini_index, best_dataset_split = \
                     property_index, threshold_value_to_split_on, split_attempt_gini_index, dataset_split_attempt
 
-    print('Best Split: [X%d < %.3f]' % (best_property_index + 1, best_threshold_value))
+    print('Best Split: [X%d < %.3f]\n' % (best_property_index + 1, best_threshold_value))
     return {'property_index_to_split_on': best_property_index, 'threshold_value': best_threshold_value,
             'subtree_datasets': best_dataset_split}
 
@@ -189,12 +204,3 @@ def terminal_node_representing_dataset(terminal_node_dataset):
     class_column_index = -1
     classes_in_dataset = [row[class_column_index] for row in terminal_node_dataset]
     return max(set(classes_in_dataset), key=classes_in_dataset.count)
-
-
-def print_tree_recursively(node, depth=0):
-    if isinstance(node, dict):
-        print('%s[X%d < %.3f]' % (depth * ' ', (node['property_index_to_split_on'] + 1), node['threshold_value']))
-        print_tree_recursively(node['left_subtree'], depth + 1)
-        print_tree_recursively(node['right_subtree'], depth + 1)
-    else:
-        print('%s[%s]' % (depth * ' ', node))
