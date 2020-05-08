@@ -3,7 +3,8 @@ import unittest
 from src.algorithms.classification_algorithms import predict_with_logistic_regression_classification, \
     update_coefficients_with_logistic_regression, predict_with_single_perceptron_classification, \
     update_weights_with_single_perceptron, calculate_gini_index, split_dataset_on, \
-    create_tree_node_with_optimal_split, terminal_node_representing_dataset, build_decision_tree
+    create_tree_node_with_optimal_split, terminal_node_representing_dataset, build_decision_tree, \
+    predict_with_decision_tree
 from src.algorithms.stochastic_gradient_descent import stochastic_gradient_descent
 
 
@@ -87,6 +88,21 @@ class MyTestCase(unittest.TestCase):
                 expected_weights[index],
                 delta=0.00000000000000001
             )
+
+    def test_decision_tree_prediction_with_decision_stump(self):
+        dataset = [[2.771244718, 1.784783929, 0], [1.728571309, 1.169761413, 0], [3.678319846, 2.81281357, 0],
+                   [3.961043357, 2.61995032, 0], [2.999208922, 2.209014212, 0], [7.497545867, 3.162953546, 1],
+                   [9.00220326, 3.339047188, 1], [7.444542326, 0.476683375, 1], [10.12493903, 3.234550982, 1],
+                   [6.642287351, 3.319983761, 1]]
+
+        decision_stump = {'property_index_to_split_on': 0, 'threshold_value': 6.642287351,
+                          'left_subtree': 0, 'right_subtree': 1}
+
+        class_column_index = -1
+        for row in dataset:
+            predicted_class = predict_with_decision_tree(decision_stump, row)
+            correct_prediction = row[class_column_index]
+            self.assertEqual(predicted_class, correct_prediction)
 
     def test_build_decision_tree_root_with_two_terminal_nodes(self):
         dataset = [[2.771244718, 1.784783929, 0], [1.728571309, 1.169761413, 0], [3.678319846, 2.81281357, 0],

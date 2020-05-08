@@ -79,6 +79,19 @@ def update_weights_with_single_perceptron(weights, data_row, learning_rate, pred
     return weights
 
 
+def predict_with_decision_tree(node, data_row):
+    if data_row[node['property_index_to_split_on']] < node['threshold_value']:
+        if isinstance(node['left_subtree'], dict):
+            return predict_with_decision_tree(node['left_subtree'], data_row)
+        else:
+            return node['left_subtree']
+    else:
+        if isinstance(node['right_subtree'], dict):
+            return predict_with_decision_tree(node['right_subtree'], data_row)
+        else:
+            return node['right_subtree']
+
+
 def build_decision_tree(training_dataset, max_depth, min_size):
     root_node = create_tree_node_with_optimal_split(training_dataset)
     create_sub_trees_for_node_at_depth(root_node, max_depth, min_size, 1)
