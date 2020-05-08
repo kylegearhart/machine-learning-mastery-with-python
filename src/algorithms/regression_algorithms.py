@@ -4,10 +4,11 @@ from src.statistics_utilities import mean, covariance, variance
 
 def zero_rule_algorithm_for_regression(training_dataset, test_dataset):
     last_column_index = -1
-    all_predicted_values_in_training_dataset = [row[last_column_index] for row in training_dataset]
-    mean_of_predicted_values = \
-        sum(all_predicted_values_in_training_dataset) / float(len(all_predicted_values_in_training_dataset))
-    predictions_on_test_dataset = [mean_of_predicted_values for _ in range(len(test_dataset))]
+    all_correct_prediction_values_in_training_dataset = [row[last_column_index] for row in training_dataset]
+    mean_of_correct_prediction_values = \
+        sum(all_correct_prediction_values_in_training_dataset) / \
+        float(len(all_correct_prediction_values_in_training_dataset))
+    predictions_on_test_dataset = [mean_of_correct_prediction_values for _ in range(len(test_dataset))]
     print('Zero-Rule prediction on test dataset (regression/mean predicted value): {0}\n'
           .format(predictions_on_test_dataset[0]))
     return predictions_on_test_dataset
