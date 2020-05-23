@@ -2,6 +2,7 @@ from math import exp
 
 from src.algorithms.stochastic_gradient_descent import stochastic_gradient_descent
 from src.logging import print_tree_recursively
+from src.statistics_utilities import gaussian_probability
 
 
 def zero_rule_algorithm_for_classification(training_dataset, test_dataset):
@@ -206,3 +207,14 @@ def terminal_node_representing_dataset(terminal_node_dataset):
     return max(set(classes_in_dataset), key=classes_in_dataset.count)
 
 
+def calculate_class_probabilities_using_naive_bayes(class_stat_summaries, row):
+    total_rows = sum([class_stat_summaries[class_value][0][2] for class_value in class_stat_summaries])
+    class_probabilities = dict()
+
+    for class_value, class_summaries in class_stat_summaries.items():
+        class_probabilities[class_value] = class_stat_summaries[class_value][0][2] / float(total_rows)
+        for class_summary_index in range(len(class_summaries)):
+            mean, stdev, _ = class_summaries[class_summary_index]
+            class_probabilities[class_value] *= gaussian_probability(row[class_summary_index], mean, stdev)
+
+    return class_probabilities

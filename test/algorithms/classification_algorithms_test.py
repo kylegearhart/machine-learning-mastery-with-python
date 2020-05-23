@@ -4,8 +4,9 @@ from src.algorithms.classification_algorithms import predict_with_logistic_regre
     update_coefficients_with_logistic_regression, predict_with_single_perceptron_classification, \
     update_weights_with_single_perceptron, calculate_gini_index, split_dataset_on, \
     create_tree_node_with_optimal_split, terminal_node_representing_dataset, build_decision_tree, \
-    predict_with_decision_tree
+    predict_with_decision_tree, calculate_class_probabilities_using_naive_bayes
 from src.algorithms.stochastic_gradient_descent import stochastic_gradient_descent
+from src.statistics_utilities import class_stat_summaries
 
 
 class MyTestCase(unittest.TestCase):
@@ -171,6 +172,18 @@ class MyTestCase(unittest.TestCase):
         perfect_class_groupings = [[[1, 0], [0, 0]], [[1, 1], [0, 1]]]
 
         self.assertEqual(calculate_gini_index(perfect_class_groupings, class_list), 0.0)
+
+    def test_naive_bayes_class_probabilities_for_data_row(self):
+        dataset = [[3.393533211, 2.331273381, 0], [3.110073483, 1.781539638, 0], [1.343808831, 3.368360954, 0],
+                   [3.582294042, 4.67917911, 0], [2.280362439, 2.866990263, 0], [7.423436942, 4.696522875, 1],
+                   [5.745051997, 3.533989803, 1], [9.172168622, 2.511101045, 1], [7.792783481, 3.424088941, 1],
+                   [7.939820817, 0.791637231, 1]]
+
+        class_summaries = class_stat_summaries(dataset)
+        self.assertEqual(
+            {0: 0.05032427673372075, 1: 0.00011557718379945765},
+            calculate_class_probabilities_using_naive_bayes(class_summaries, dataset[0])
+        )
 
 
 if __name__ == '__main__':

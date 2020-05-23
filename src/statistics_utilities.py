@@ -21,7 +21,7 @@ def gaussian_probability(property_value, average, std_deviation):
     return (1 / (sqrt(2 * pi) * std_deviation)) * exponent
 
 
-def summarize_by_class(dataset):
+def class_stat_summaries(dataset):
     class_to_data_rows_dict = separate_dataset_into_classes(dataset)
     class_to_stat_summaries_dict = dict()
 

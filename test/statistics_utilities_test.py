@@ -1,6 +1,6 @@
 import unittest
 
-from src.statistics_utilities import column_stat_summaries, separate_dataset_into_classes, summarize_by_class, \
+from src.statistics_utilities import column_stat_summaries, separate_dataset_into_classes, class_stat_summaries, \
     gaussian_probability
 
 
@@ -12,7 +12,6 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(gaussian_probability(1.0, mean, standard_deviation), 0.3989422804014327)
         self.assertEqual(gaussian_probability(2.0, mean, standard_deviation), 0.24197072451914337)
         self.assertEqual(gaussian_probability(0.0, mean, standard_deviation), 0.24197072451914337)
-
 
     def test_summarize_by_class(self):
         dataset = [[3.393533211, 2.331273381, 0],
@@ -27,7 +26,7 @@ class MyTestCase(unittest.TestCase):
                    [7.939820817, 0.791637231, 1]]
 
         self.assertEqual(
-            summarize_by_class(dataset),
+            class_stat_summaries(dataset),
             {
                 0: [
                     (2.7420144012, 0.9265683289298018, 5),
