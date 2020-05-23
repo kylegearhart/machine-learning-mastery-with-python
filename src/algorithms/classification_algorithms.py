@@ -2,7 +2,7 @@ from math import exp
 
 from src.algorithms.stochastic_gradient_descent import stochastic_gradient_descent
 from src.logging import print_tree_recursively
-from src.statistics_utilities import gaussian_probability
+from src.statistics_utilities import gaussian_probability, class_stat_summaries
 
 
 def zero_rule_algorithm_for_classification(training_dataset, test_dataset):
@@ -205,6 +205,29 @@ def terminal_node_representing_dataset(terminal_node_dataset):
     class_column_index = -1
     classes_in_dataset = [row[class_column_index] for row in terminal_node_dataset]
     return max(set(classes_in_dataset), key=classes_in_dataset.count)
+
+
+def naive_bayes(training_dataset, test_dataset):
+    class_summaries = class_stat_summaries(training_dataset)
+    predictions = list()
+
+    for test_data_row in test_dataset:
+        prediction = predict_class_using_naive_bayes(class_summaries, test_data_row)
+        predictions.append(prediction)
+
+    return predictions
+
+
+def predict_class_using_naive_bayes(class_summaries, test_data_row):
+    all_class_probabilities = calculate_class_probabilities_using_naive_bayes(class_summaries, test_data_row)
+    best_class_prediction, best_probability = None, -1
+
+    for class_value, probability in all_class_probabilities.items():
+        if best_class_prediction is None or probability > best_probability:
+            best_probability = probability
+            best_class_prediction = class_value
+
+    return best_class_prediction
 
 
 def calculate_class_probabilities_using_naive_bayes(class_stat_summaries, row):
