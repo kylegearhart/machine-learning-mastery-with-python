@@ -204,3 +204,17 @@ def terminal_node_representing_dataset(terminal_node_dataset):
     class_column_index = -1
     classes_in_dataset = [row[class_column_index] for row in terminal_node_dataset]
     return max(set(classes_in_dataset), key=classes_in_dataset.count)
+
+
+def separate_dataset_into_classes(dataset):
+    class_column_index = -1
+    class_dict = dict()
+    for row_index in range(len(dataset)):
+        data_row = dataset[row_index]
+        class_value = data_row[class_column_index]
+
+        if class_value not in class_dict:
+            class_dict[class_value] = list()
+
+        class_dict[class_value].append(data_row)
+    return class_dict
