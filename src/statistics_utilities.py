@@ -16,6 +16,25 @@ def covariance(x_values, mean_x, y_values, mean_y):
     return result
 
 
+def column_stat_summaries(dataset):
+    stat_summaries = list()
+    num_columns_in_dataset = len(dataset[0])
+    dataset_columns = zip(*dataset)
+
+    for column_index, column in enumerate(dataset_columns):
+        if column_index == (num_columns_in_dataset - 1):
+            continue
+
+        stat_summary = (mean(column), standard_deviation(column), len(column))
+        stat_summaries.append(stat_summary)
+
+    return stat_summaries
+
+
+def standard_deviation(numbers):
+    return sqrt(variance(numbers, mean(numbers)) / float(len(numbers) - 1))
+
+
 def variance(values, mean_of_values):
     value_distances_from_mean_squared = [(value - mean_of_values) ** 2 for value in values]
     return sum(value_distances_from_mean_squared)
