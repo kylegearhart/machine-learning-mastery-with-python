@@ -1,4 +1,4 @@
-from math import sqrt
+from math import sqrt, exp, pi
 
 
 def calculate_percentage_correct(actual_classes, predicted_classes):
@@ -14,6 +14,11 @@ def covariance(x_values, mean_x, y_values, mean_y):
     for index in range(len(x_values)):
         result += ((x_values[index] - mean_x) * (y_values[index] - mean_y))
     return result
+
+
+def gaussian_probability(property_value, average, std_deviation):
+    exponent = exp(-((property_value - average) ** 2 / (2 * std_deviation ** 2)))
+    return (1 / (sqrt(2 * pi) * std_deviation)) * exponent
 
 
 def summarize_by_class(dataset):

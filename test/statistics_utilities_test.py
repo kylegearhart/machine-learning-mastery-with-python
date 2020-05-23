@@ -1,9 +1,19 @@
 import unittest
 
-from src.statistics_utilities import column_stat_summaries, separate_dataset_into_classes, summarize_by_class
+from src.statistics_utilities import column_stat_summaries, separate_dataset_into_classes, summarize_by_class, \
+    gaussian_probability
 
 
 class MyTestCase(unittest.TestCase):
+    def test_gaussian_probability(self):
+        mean = 1.0
+        standard_deviation = 1.0
+
+        self.assertEqual(gaussian_probability(1.0, mean, standard_deviation), 0.3989422804014327)
+        self.assertEqual(gaussian_probability(2.0, mean, standard_deviation), 0.24197072451914337)
+        self.assertEqual(gaussian_probability(0.0, mean, standard_deviation), 0.24197072451914337)
+
+
     def test_summarize_by_class(self):
         dataset = [[3.393533211, 2.331273381, 0],
                    [3.110073483, 1.781539638, 0],
