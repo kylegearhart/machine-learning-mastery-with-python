@@ -16,6 +16,16 @@ def covariance(x_values, mean_x, y_values, mean_y):
     return result
 
 
+def summarize_by_class(dataset):
+    class_to_data_rows_dict = separate_dataset_into_classes(dataset)
+    class_to_stat_summaries_dict = dict()
+
+    for class_value, data_rows in class_to_data_rows_dict.items():
+        class_to_stat_summaries_dict[class_value] = column_stat_summaries(data_rows)
+
+    return class_to_stat_summaries_dict
+
+
 def column_stat_summaries(dataset):
     stat_summaries = list()
     num_columns_in_dataset = len(dataset[0])
