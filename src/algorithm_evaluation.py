@@ -26,7 +26,7 @@ def evaluate_classification_algorithm_with_train_test_split(dataset, algorithm, 
     accuracy_of_algorithm = \
         calculate_percentage_correct(predictions_by_algorithm_on_test_dataset,
                                      correct_predictions_for_test_dataset)
-    print('Accuracy for algorithm using {0}% test/training split: '.format(split_percentage * 100))
+    print('Accuracy for {0} using {1}% test/training split: '.format(algorithm.__name__, split_percentage * 100))
     print('%.3f%%\n' % accuracy_of_algorithm)
     return accuracy_of_algorithm
 
@@ -35,7 +35,7 @@ def evaluate_classification_algorithm_with_k_fold_cross_validation(dataset, algo
     algorithm_accuracy_on_each_fold = evaluate_algorithm_with_k_fold_cross_validation(
         dataset, algorithm, num_folds, calculate_percentage_correct, *args
     )
-    print('Accuracy for algorithm over {0} folds:'.format(num_folds))
+    print('Accuracy for {0} over {1} folds:'.format(algorithm.__name__, num_folds))
     print(' '.join(str('%.3f%%' % accuracy) for accuracy in algorithm_accuracy_on_each_fold))
     print('Mean accuracy: %.3f%%\n' % (sum(algorithm_accuracy_on_each_fold) / num_folds))
 
